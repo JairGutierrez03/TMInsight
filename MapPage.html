@@ -12,7 +12,7 @@
 
     <div class="dashboard-container">
 
-        <!-- ✅ Modern Sidebar -->
+        
         <nav class="sidebar">
             <div class="sidebar-logo">
                 <span class="logo-t">TM</span>Insights
@@ -35,7 +35,7 @@
 
         </nav>
 
-        <!-- ✅ Main Content -->
+        
         <main class="main-content">
 
             <!-- Header -->
@@ -85,10 +85,10 @@
 
                 </div>
 
-                <!-- RIGHT COLUMN -->
+                
                 <div class="content-column-right">
 
-                    <!-- ✅ County Lookup Card -->
+                    
                     <div class="lookup-card side-card">
                        <h2 class="lookup-title"><i class="lucide lucide-search"></i> County Lookup</h2>
                         <p class="lookup-subtitle">Search any Texas county to view sentiment and recommendations</p>
@@ -140,7 +140,7 @@
         </main>
     </div>
 
-<!-- ✅ County Lookup Script -->
+
 <script>
 // List of all Texas counties
 const counties = [
@@ -236,13 +236,13 @@ document.getElementById("lookup-btn").addEventListener("click", function () {
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
 <script>
-// Load New CSV → Compute Avg → Draw Chart with Center Text
+// Load New CSV 
 fetch("county_happiness_with_reddit_feedback_normalized.csv")
     .then(response => response.text())
     .then(csv => {
         const rows = csv.trim().split("\n").slice(1); // skip header
 
-        // Take the 4th column (HappinessScore)
+        
         const scores = rows.map(row => {
             const parts = row.split(",", 5); // Only split first 5 columns, ignore the rest
             return parseFloat(parts[4].trim()); // index 4 = HappinessScore
@@ -298,13 +298,13 @@ fetch("county_happiness_with_reddit_feedback_normalized.csv")
             return { name: parts[0].trim(), score: parseFloat(parts[4].trim()) };
         });
 
-        // Sort counties by score
+        // Sort by score
         const sorted = counties.sort((a,b) => b.score - a.score);
 
         const topFive = sorted.slice(0, 5);
         const bottomFive = sorted.slice(-5).reverse();
 
-        // Populate UI
+        
         const topList = document.getElementById("top-five");
         const bottomList = document.getElementById("bottom-five");
 
