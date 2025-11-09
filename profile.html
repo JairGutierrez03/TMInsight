@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>User Profile</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+<div class="dashboard-container">
+
+    <!-- SIDEBAR -->
+    <nav class="sidebar">
+        <div class="sidebar-logo">
+            <span class="logo-t">TM</span>Insights
+        </div>
+
+        <div class="sidebar-nav">
+    <div class="nav-item" onclick="window.location.href='mapPage.html'">
+        <i class="lucide lucide-home"></i> Home
+    </div>
+
+    <div class="nav-item" onclick="window.location.href='network.html'">
+        <i class="lucide lucide-share-2"></i> Network
+    </div>
+
+    <div class="nav-item active" onclick="window.location.href='profile.html'">
+        <i class="lucide lucide-user"></i> Profile
+    </div>
+</div>
+
+    </nav>
+
+    <!-- MAIN -->
+    <main class="main-content">
+        <header class="main-header">
+            <div class="greeting">Account Profile</div>
+            <div class="avatar"></div>
+        </header>
+
+        <div class="profile-page">
+            <div class="profile-card-large">
+                <div class="profile-avatar-large"></div>
+                <h2 class="profile-username">John Doe</h2>
+                <p class="profile-role-text">T-Mobile Insights Team</p>
+            </div>
+
+            <div class="profile-settings">
+                <h3>Profile Information</h3>
+
+                <div class="profile-field">
+                    <label>Name</label>
+                    <input type="text" value="John Doe" disabled>
+                </div>
+
+                <div class="profile-field">
+                    <label>Role</label>
+                    <input type="text" value="Network Analyst" disabled>
+                </div>
+
+                <div class="profile-field">
+                    <label>Email</label>
+                    <input type="text" value="john.doe@tmobile.com" disabled>
+                </div>
+
+                <button id="edit-btn">Edit Profile (Non-functional for now)</button>
+            </div>
+        </div>
+    </main>
+
+</div>
+
+</body>
+</html>

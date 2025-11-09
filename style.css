@@ -1,0 +1,555 @@
+/* GENERAL */
+body, html {
+    margin: 0;
+    padding: 0;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    height: 100vh;
+    width: 100vw;
+    background-color: #f4f4f7;
+    box-sizing: border-box;
+    overflow-y: auto;
+    overflow-x: hidden;
+}
+
+.dashboard-container {
+    display: flex;
+    min-height: 100%;
+    padding: 20px;
+    gap: 20px;
+}
+
+/* SIDEBAR */
+.sidebar {
+    flex-basis: 240px;
+    background: #ffffff;
+    border-radius: 14px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.06);
+    padding: 25px 18px;
+    display: flex;
+    flex-direction: column;
+    gap: 30px;
+}
+
+.sidebar-logo {
+    font-size: 1.9rem;
+    font-weight: 700;
+    color: #333;
+}
+
+.logo-t {
+    color: #E20074;
+}
+
+.sidebar-nav {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.nav-item {
+    padding: 12px 14px;
+    border-radius: 8px;
+    font-size: 1.15rem;
+    cursor: pointer;
+    transition: 0.2s ease;
+    color: #333;
+}
+
+.nav-item:hover {
+    background-color: #ececf0;
+}
+
+.nav-item.active {
+    background-color: #E20074;
+    color: white;
+    font-weight: bold;
+}
+
+/* MAIN CONTENT */
+.main-content {
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.main-header {
+    height: 70px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.greeting {
+    font-size: 1.4rem;
+    font-weight: 500;
+}
+
+.avatar {
+    width: 50px;
+    height: 50px;
+    background: #ccc;
+    border-radius: 50%;
+}
+
+/* CONTENT BODY */
+.content-body {
+    display: flex;
+    flex-grow: 1;
+    gap: 20px;
+}
+
+/* LEFT COLUMN */
+.content-column-left {
+    flex: 2;
+    min-width: 0; /* allows iframe to scale properly */
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+/* MAP CONTAINER */
+.map-container {
+    height: 450px;
+    background: #ffffff;
+    border-radius: 14px;
+    padding: 18px;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.06);
+    display: flex;
+    flex-direction: column;
+}
+
+.map-title {
+    font-size: 1.45rem;
+    font-weight: bold;
+    margin-bottom: 8px;
+}
+
+.map-container iframe {
+    flex-grow: 1;      /* expand to fill container minus title + subtitle */
+    width: 100%;
+    height: 100%;      /* <-- this restores the original map size */
+    border: none;
+    border-radius: 10px;
+}
+
+
+
+/* VOLUME METRICS */
+.volume-container {
+    min-height: 230px;
+    background: white;
+    border-radius: 14px;
+    padding: 18px;
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.06);
+}
+
+.volume-title {
+    font-size: 1.2rem;
+    font-weight: bold;
+}
+
+.volume-cards {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-grow: 1;
+}
+
+#avgHappinessChart {
+    display: block;
+    margin: auto;
+}
+
+.volume-caption {
+    text-align: center;
+    font-size: 0.9rem;
+    color: #555;
+    margin-top: 6px;
+}
+
+/* RIGHT COLUMN */
+.content-column-right {
+    flex: 1;
+    max-width: 360px; /* keeps lookup sidebar from stretching */
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+/* LOOKUP CARD */
+.lookup-card {
+    background: white;
+    border-radius: 14px;
+    padding: 18px;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.06);
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    position: relative;
+}
+
+.lookup-title {
+    font-size: 1.3rem;
+    font-weight: bold;
+}
+
+/* SEARCH INPUT + WRAPPER */
+.lookup-input-wrapper {
+    width: 100%;
+    position: relative;
+    margin-bottom: 8px;
+}
+
+#county-search {
+    width: 100%;
+    padding: 12px;
+    font-size: 1rem;
+    border: 1.5px solid #bbb;
+    border-radius: 8px;
+    box-sizing: border-box;
+}
+
+/* DROPDOWN LIST */
+.dropdown-list {
+    position: absolute;
+    top: calc(100% + 4px);
+    left: 0;
+    width: 100%;
+    background: white;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.08);
+    max-height: 160px;
+    overflow-y: auto;
+    z-index: 9999;
+    display: none;
+}
+
+.dropdown-item {
+    padding: 10px;
+    cursor: pointer;
+}
+
+.dropdown-item:hover {
+    background-color: #ececf0;
+}
+
+/* BUTTON */
+#lookup-btn {
+    padding: 12px;
+    background-color: #E20074;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 1rem;
+}
+
+#lookup-btn:hover {
+    background-color: #b8005d;
+}
+
+#lookup-error {
+    color: red;
+    height: 16px;
+}
+
+/* Map Subtitle */
+.map-subtitle {
+    font-size: 0.95rem;
+    font-weight: 400;
+    color: #666;
+    margin-top: -4px;
+    margin-bottom: 10px;
+}
+
+/* Lookup Helper Text */
+.lookup-subtitle {
+    font-size: 0.9rem;
+    color: #777;
+    margin-top: -3px;
+    margin-bottom: -6px;
+}
+
+.nav-item i {
+    margin-right: 10px;
+    font-size: 1.25rem;
+    vertical-align: middle;
+}
+
+.nav-item.active i {
+    color: white; /* icon turns white when selected */
+}
+
+.nav-item:hover i {
+    color: #E20074; /* icon gets pink on hover */
+}
+
+.nav-item i {
+    transition: transform .2s ease;
+}
+
+.nav-item:hover i {
+    transform: scale(1.18);
+}
+
+.highlight-card {
+    background: white;
+    border-radius: 14px;
+    padding: 18px;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.06);
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.highlight-title {
+    font-size: 1.3rem;
+    font-weight: bold;
+}
+
+.highlight-subtitle {
+    font-size: 0.9rem;
+    color: #777;
+    margin-top: -6px;
+}
+
+.highlight-lists {
+    display: flex;
+    justify-content: space-between;
+    gap: 16px;
+}
+
+.highlight-section {
+    flex: 1;
+}
+
+.highlight-header {
+    font-size: 1.05rem;
+    font-weight: 600;
+    margin-bottom: 6px;
+    color: #333;
+}
+
+.highlight-list {
+    list-style: none;
+    padding-left: 0;
+    margin: 0;
+}
+
+.highlight-list li {
+    padding: 6px 0;
+    font-size: 0.95rem;
+    color: #444;
+    border-bottom: 1px solid #eee;
+}
+
+
+.county-score-card {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 10px; /* reduced spacing */
+    background: white;
+    padding: 18px;
+    border-radius: 14px;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.06);
+    margin-top: 20px;
+}
+
+.score-item {
+    display: flex;
+    flex-direction: column;
+    font-size: 1rem;
+}
+
+.score-item label {
+    color: #666;
+    margin-bottom: 4px;
+}
+
+.score-item span {
+    font-size: 1.4rem;
+    font-weight: bold;
+    color: #333;
+}
+
+.score-item.highlight span {
+    color: #E20074;
+}
+
+.cluster-box {
+    margin-top: 20px;
+    padding: 14px;
+    background: #E20074;
+    color: white;
+    text-align: center;
+    border-radius: 10px;
+    font-size: 1.2rem;
+    font-weight: 600;
+}
+
+.recommendation-box {
+    margin-top: 30px;
+    background: white;
+    padding: 20px;
+    border-radius: 14px;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.06);
+}
+
+.recommendation-box h2 {
+    margin-bottom: 12px;
+    font-size: 1.3rem;
+}
+
+.recommendation-box p {
+    line-height: 1.55;
+    font-size: 1.05rem;
+    color: #444;
+}
+
+.cluster-box.low { background:#d9534f; }
+.cluster-box.moderate { background:#f0ad4e; }
+.cluster-box.positive { background:#5bc0de; }
+.cluster-box.excellent { background:#5cb85c; }
+ 
+/* Expand container so chart has room */
+.county-container {
+    max-width: 1000px;
+    width: 100%;
+    margin: 40px auto;
+}
+
+.county-score-card {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 10px;
+    background: white;
+    padding: 18px;
+    border-radius: 14px;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.06);
+    margin-top: 20px;
+}
+/* SANKEY WRAPPER */
+.component-sankey-box {
+    background: white;
+    padding: 24px;
+    border-radius: 14px;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.06);
+    margin-top: 25px;
+    width: 100%;
+    max-width: 900px;   /* ✅ reduced width so boxes don't reach screen edges */
+    margin-left: auto;
+    margin-right: auto;
+}
+
+#sankeyChart {
+    width: 100%;
+    height: 450px;  /* ✅ consistent height */
+    overflow: visible;  /* allow chart labels to extend safely */
+}
+
+
+.network-container {
+    width: 100%;
+    max-width: 900px;  /* prevents overflow on ultra-wide screens */
+    margin-left: auto;
+    margin-right: auto;
+}
+
+
+.network-chart-box {
+    width: 100%;
+    height: 420px;
+    min-height: 420px;
+    max-height: 420px;
+    position: relative;
+    background: white;
+    padding: 18px;
+    border-radius: 14px;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.06);
+}
+
+
+.subtitle {
+    font-size: 0.9rem;
+    color: #777;
+}
+
+.profile-page {
+    max-width: 700px;
+    margin: 40px auto;
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+}
+
+.profile-card-large {
+    background: white;
+    padding: 30px;
+    border-radius: 14px;
+    text-align: center;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.06);
+}
+
+.profile-avatar-large {
+    width: 95px;
+    height: 95px;
+    background: #E20074;
+    border-radius: 50%;
+    margin: auto;
+    margin-bottom: 14px;
+    border: 4px solid white;
+    box-shadow: 0 0 0 3px #E20074;
+}
+
+.profile-username {
+    font-size: 1.8rem;
+    margin-bottom: 4px;
+}
+
+.profile-role-text {
+    color: #777;
+    font-size: 1rem;
+}
+
+.profile-settings {
+    background: white;
+    padding: 24px;
+    border-radius: 14px;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.06);
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+.profile-field {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.profile-field label {
+    font-size: 0.9rem;
+    color: #666;
+}
+
+.profile-field input {
+    padding: 10px;
+    border-radius: 8px;
+    border: 1.5px solid #bbb;
+    font-size: 1rem;
+}
+
+#edit-btn {
+    margin-top: 10px;
+    padding: 12px;
+    background: #E20074;
+    border: none;
+    color: white;
+    border-radius: 8px;
+    cursor: pointer;
+}

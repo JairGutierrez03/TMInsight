@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>County Details</title>
+    <link rel="stylesheet" href="style.css">
+
+    <!-- ✅ Google Charts -->
+    <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+</head>
+<body>
+
+<div class="dashboard-container">
+
+   <nav class="sidebar">
+    <div class="sidebar-logo">
+        <span class="logo-t">T</span>Insights
+    </div>
+
+    <div class="sidebar-nav">
+        <div class="nav-item" onclick="window.location.href='mapPage.html'">
+            <i class="lucide lucide-home"></i> Home
+        </div>
+
+        <div class="nav-item" onclick="window.location.href='network.html'">
+            <i class="lucide lucide-share-2"></i> Network
+        </div>
+
+        <div class="nav-item" onclick="window.location.href='profile.html'">
+            <i class="lucide lucide-user"></i> Profile
+        </div>
+    </div>
+</nav>
+
+
+    <!-- MAIN CONTENT -->
+    <main class="main-content">
+        <header class="main-header">
+            <div class="greeting" id="county-title"></div>
+            <div class="avatar"></div>
+        </header>
+
+        <div class="county-container">
+
+            <!-- SCORE GRID -->
+            <div class="county-score-card">
+                <div class="score-item">
+                    <label>Sentiment Score</label>
+                    <span id="sentiment-score">--</span>
+                </div>
+
+                <div class="score-item">
+                    <label>Network Score</label>
+                    <span id="network-score">--</span>
+                </div>
+
+                <div class="score-item">
+                    <label>Reddit Score</label>
+                    <span id="reddit-score">--</span>
+                </div>
+
+                <div class="score-item highlight">
+                    <label>Total Happiness Score</label>
+                    <span id="happiness-score">--</span>
+                </div>
+            </div>
+
+            <!-- ✅ SANKEY CHART -->
+            <div class="component-sankey-box">
+                <h3>Score Contribution Flow</h3>
+                <div id="sankeyChart"></div>
+            </div>
+
+
+            <!-- CLUSTER LABEL -->
+            <div class="cluster-box" id="cluster-box">Loading...</div>
+
+            <!-- RECOMMENDATION -->
+            <div class="recommendation-box">
+                <h2>Recommendation</h2>
+                <p id="recommendation-text">Loading suggestion...</p>
+            </div>
+
+        </div>
+    </main>
+</div>
+
+
+<script>
+// Parse county from URL
+const urlParams = new URLSearchParams(window.location.search);
+const countyName = urlParams.get("county");
+document.getElementById("county-title").textContent = countyName;
+
+// Fetch CSV + extract correct row
+fetch("county_happiness_with_reddit_feedback_normalized.csv")
+.then(response => response.text())
+.then(csv => {
+
+    const rows = csv.trim().split("\n").slice(1);
+    const match = rows.find(row =>
+        row.toLowerCase().startsWith(countyName.replace(" County","").toLowerCase())
+    );
+
+    if (!match) {
+        alert("County data not found.");
+        return;
+    }
+
+    const parts = match.match(/(".*?"|[^",]+)(?=\s*,|\s*$)/g).map(p => p.replace(/^"|"$/g,"").trim());
+
+    const sentiment = parseFloat(parts[1]);
+    const network = parseFloat(parts[2]);
+    const reddit = parseFloat(parts[3]);
+    const happiness = parseFloat(parts[4]);
+    const label = parts[6];
+    const recommendation = parts[7];
+
+    // Fill UI values
+    document.getElementById("sentiment-score").textContent = sentiment.toFixed(2);
+    document.getElementById("network-score").textContent = network.toFixed(2);
+    document.getElementById("reddit-score").textContent = reddit.toFixed(2);
+    document.getElementById("happiness-score").textContent = happiness.toFixed(2);
+
+    // Label classification colors
+    const clusterDiv = document.getElementById("cluster-box");
+    clusterDiv.textContent = label;
+    const labelClassMap = {
+        "Low Happiness": "low",
+        "Moderate Happiness": "moderate",
+        "Positive Happiness": "positive",
+        "High Happiness": "excellent"
+    };
+    clusterDiv.className = "cluster-box";
+    clusterDiv.classList.add(labelClassMap[label] || "moderate");
+
+    // Recommendation
+    document.getElementById("recommendation-text").textContent = recommendation;
+
+  // ✅ Draw Sankey
+google.charts.load("current", { packages:["sankey"] });
+google.charts.setOnLoadCallback(() => {
+
+    const data = new google.visualization.DataTable();
+    data.addColumn("string", "From");
+    data.addColumn("string", "To");
+    data.addColumn("number", "Value");
+
+    // Prevent collapse if any component is zero
+    const safeSentiment = sentiment > 0 ? sentiment : 0.01;
+    const safeNetwork = network > 0 ? network : 0.01;
+    const safeReddit = reddit > 0 ? reddit : 0.01;
+
+   data.addRows([
+    ["Sentiment", "Total Happiness", safeSentiment],
+    ["Network", "Total Happiness", safeNetwork],
+    ["Reddit", "Total Happiness", safeReddit]
+]);
+
+const options = {
+  width: "100%",
+  height: 420,
+  chartArea: { left: 0, right: 0, top: 10, bottom: 10 },
+  sankey: {
+    node: {
+      label: { fontSize: 14 },
+      width: 14,
+      nodePadding: 22,
+      colors: [
+        "#f7c1ea",  // Network
+        "#ffd2fa",  // Reddit
+        "#f063c1",  // Sentiment
+        "#E20074"   // Total Happiness (stays bold magenta)
+      ]
+    },
+    link: { colorMode: "source" }
+  }
+};
+
+   
+
+
+    new google.visualization.Sankey(document.getElementById("sankeyChart")).draw(data, options);
+});
+
+});
+</script>
+
+</body>
+</html>

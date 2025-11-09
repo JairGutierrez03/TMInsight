@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Network Status</title>
+    <link rel="stylesheet" href="style.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+
+<body>
+
+<div class="dashboard-container">
+
+    <!-- SIDEBAR -->
+    <nav class="sidebar">
+        <div class="sidebar-logo">
+            <span class="logo-t">TM</span>Insights
+        </div>
+
+        <div class="sidebar-nav">
+    <div class="nav-item" onclick="window.location.href='mapPage.html'">
+        <i class="lucide lucide-home"></i> Home
+    </div>
+
+    <div class="nav-item active" onclick="window.location.href='network.html'">
+        <i class="lucide lucide-share-2"></i> Network
+    </div>
+
+    <div class="nav-item" onclick="window.location.href='profile.html'">
+        <i class="lucide lucide-user"></i> Profile
+    </div>
+</div>
+
+    </nav>
+
+    <!-- MAIN CONTENT -->
+    <main class="main-content">
+        <header class="main-header">
+            <div class="greeting">T-Mobile Network Live Status</div>
+            <div class="avatar"></div>
+        </header>
+
+        <div class="network-container">
+
+            <h2 style="margin-bottom:6px;">Reported Outages (Live)</h2>
+            <p class="subtitle">Updating every 10 seconds (simulated)</p>
+
+            <div class="network-chart-box">
+                <canvas id="outageChart"></canvas>
+            </div>
+        </div>
+
+    </main>
+</div>
+
+
+<script>
+// Setup Chart
+const ctx = document.getElementById("outageChart").getContext("2d");
+
+let outageChart = new Chart(ctx, {
+    type: "line",
+    data: {
+        labels: [],
+        datasets: [{
+            label: "Reported Network Issues",
+            data: [],
+            borderColor: "#E20074",
+            backgroundColor: "rgba(226, 0, 116, 0.18)",
+            borderWidth: 3,
+            tension: 0.25,
+            fill: true
+        }]
+    },
+    options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        scales: { 
+            y: { 
+                beginAtZero: true,
+                suggestedMax: 60 
+            }
+        },
+        plugins: {
+            legend: { display: false }
+        }
+    }
+});
+
+// Fake Data Simulation
+function generateFakeOutageValue() {
+    return Math.floor(Math.random() * 40) + 5;
+}
+
+function updateChart() {
+    const count = generateFakeOutageValue();
+    const time = new Date().toLocaleTimeString([], {hour: "2-digit", minute: "2-digit"});
+
+    outageChart.data.labels.push(time);
+    outageChart.data.datasets[0].data.push(count);
+
+    if (outageChart.data.labels.length > 20) {
+        outageChart.data.labels.shift();
+        outageChart.data.datasets[0].data.shift();
+    }
+
+    outageChart.update();
+}
+
+// Fill initial fake history
+for (let i = 0; i < 6; i++) {
+    outageChart.data.labels.push(`-${6-i}m`);
+    outageChart.data.datasets[0].data.push(generateFakeOutageValue());
+}
+outageChart.update();
+
+// Update every 10 seconds
+setInterval(updateChart, 10000);
+</script>
+
+</body>
+</html>

@@ -1,0 +1,332 @@
+<!DOCTYPE html>
+<html lang="en">
+<link rel="stylesheet" href="https://unpkg.com/lucide-static@latest/font/lucide.css">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device=device-width, initial-scale=1.0">
+    <title>TInsights Dashboard</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <div class="dashboard-container">
+
+        <!-- ✅ Modern Sidebar -->
+        <nav class="sidebar">
+            <div class="sidebar-logo">
+                <span class="logo-t">TM</span>Insights
+            </div>
+
+            <div class="sidebar-nav">
+    <div class="nav-item active" onclick="window.location.href='mapPage.html'">
+        <i class="lucide lucide-home"></i> Home
+    </div>
+
+    <div class="nav-item" onclick="window.location.href='network.html'">
+        <i class="lucide lucide-share-2"></i> Network
+    </div>
+
+    <div class="nav-item" onclick="window.location.href='profile.html'">
+        <i class="lucide lucide-user"></i> Profile
+    </div>
+</div>
+
+
+        </nav>
+
+        <!-- ✅ Main Content -->
+        <main class="main-content">
+
+            <!-- Header -->
+            <header class="main-header">
+                <div class="greeting">Welcome back, User</div>
+                <div class="avatar"></div>
+            </header>
+
+            <!-- Content Body -->
+            <div class="content-body">
+
+                <!-- LEFT COLUMN -->
+                <div class="content-column-left">
+
+                    <!-- MAP SECTION -->
+                   <div class="map-container">
+                        <div class="map-title">
+                            <i class="lucide lucide-map"></i> Texas Customer Happiness Map
+                        </div>
+                        <div class="map-subtitle">Darker magenta indicates higher customer happiness.</div>
+                        <iframe src="texas_county_happiness_map.html"></iframe>
+                    </div>
+
+
+
+                    <!-- Volume Cards -->
+                                <div class="volume-container">
+
+                   <div class="volume-title">
+                        <i class="lucide lucide-gauge"></i> Volume Metrics
+                    </div>
+
+
+                    <div class="volume-label" style="text-align:center; font-size:1.05rem; font-weight:500; color:#333;">
+                        Statewide Average Happiness
+                    </div>
+
+                    <div class="volume-cards" style="justify-content:center; align-items:center;">
+                        <canvas id="avgHappinessChart" width="170" height="170"></canvas>
+                    </div>
+
+                    <div class="volume-caption" style="text-align:center; font-size:0.9rem; color:#555; margin-top:6px;">
+                        Across all measured Texas counties
+                    </div>
+
+                </div>
+
+                </div>
+
+                <!-- RIGHT COLUMN -->
+                <div class="content-column-right">
+
+                    <!-- ✅ County Lookup Card -->
+                    <div class="lookup-card side-card">
+                       <h2 class="lookup-title"><i class="lucide lucide-search"></i> County Lookup</h2>
+                        <p class="lookup-subtitle">Search any Texas county to view sentiment and recommendations</p>
+
+                        <div class="lookup-input-wrapper">
+                            <input 
+                                type="text"
+                                id="county-search"
+                                placeholder="Search county..."
+                                autocomplete="off"
+                            >
+                            <div id="county-dropdown" class="dropdown-list"></div>
+                        </div>
+
+
+
+                        <button id="lookup-btn">View Details</button>
+                        <p id="lookup-error"></p>
+                    </div>
+
+                   
+                    <div class="highlight-card side-card">
+                        <h2 class="highlight-title">County Highlights</h2>
+                        <p class="highlight-subtitle">Top 5 happiest and lowest scoring counties</p>
+
+                        <div class="highlight-lists">
+
+                            <div class="highlight-section">
+                                <h3 class="highlight-header">Highest Happiness</h3>
+                                <ul id="top-five" class="highlight-list"></ul>
+                            </div>
+
+                            <div class="highlight-section">
+                                <h3 class="highlight-header">Lowest Happiness</h3>
+                                <ul id="bottom-five" class="highlight-list"></ul>
+                            </div>
+
+                        </div>
+                    </div>
+
+
+
+
+
+                    <div class="side-card"></div>
+                </div>
+
+            </div>
+        </main>
+    </div>
+
+<!-- ✅ County Lookup Script -->
+<script>
+// List of all Texas counties
+const counties = [
+    "Anderson County","Andrews County","Angelina County","Aransas County","Archer County","Armstrong County",
+    "Atascosa County","Austin County","Bailey County","Bandera County","Bastrop County","Baylor County",
+    "Bee County","Bell County","Bexar County","Blanco County","Borden County","Bosque County","Bowie County",
+    "Brazoria County","Brazos County","Brewster County","Briscoe County","Brooks County","Brown County",
+    "Burleson County","Burnet County","Caldwell County","Calhoun County","Callahan County","Cameron County",
+    "Camp County","Carson County","Cass County","Castro County","Chambers County","Cherokee County",
+    "Childress County","Clay County","Cochran County","Coke County","Coleman County","Collin County",
+    "Collingsworth County","Colorado County","Comal County","Comanche County","Concho County",
+    "Cooke County","Coryell County","Cottle County","Crane County","Crockett County","Crosby County",
+    "Culberson County","Dallam County","Dallas County","Dawson County","DeWitt County","Deaf Smith County",
+    "Delta County","Denton County","Dickens County","Dimmit County","Donley County","Duval County",
+    "Eastland County","Ector County","Edwards County","El Paso County","Ellis County","Erath County",
+    "Falls County","Fannin County","Fayette County","Fisher County","Floyd County","Foard County",
+    "Fort Bend County","Franklin County","Freestone County","Frio County","Gaines County","Galveston County",
+    "Garza County","Gillespie County","Glasscock County","Goliad County","Gonzales County","Gray County",
+    "Grayson County","Gregg County","Grimes County","Guadalupe County","Hale County","Hall County",
+    "Hamilton County","Hansford County","Hardeman County","Hardin County","Harris County","Harrison County",
+    "Hartley County","Haskell County","Hays County","Hemphill County","Henderson County","Hidalgo County",
+    "Hill County","Hockley County","Hood County","Hopkins County","Houston County","Howard County",
+    "Hudspeth County","Hunt County","Hutchinson County","Irion County","Jack County","Jackson County",
+    "Jasper County","Jeff Davis County","Jefferson County","Jim Hogg County","Jim Wells County",
+    "Johnson County","Jones County","Karnes County","Kaufman County","Kendall County","Kenedy County",
+    "Kent County","Kerr County","Kimble County","King County","Kinney County","Kleberg County",
+    "Knox County","La Salle County","Lamar County","Lamb County","Lampasas County","Lavaca County",
+    "Lee County","Leon County","Liberty County","Limestone County","Lipscomb County","Live Oak County",
+    "Llano County","Loving County","Lubbock County","Lynn County","Madison County","Marion County",
+    "Martin County","Mason County","Matagorda County","Maverick County","McCulloch County","McLennan County",
+    "McMullen County","Medina County","Menard County","Midland County","Milam County","Mills County",
+    "Mitchell County","Montague County","Montgomery County","Moore County","Morris County","Motley County",
+    "Nacogdoches County","Navarro County","Newton County","Nolan County","Nueces County","Ochiltree County",
+    "Oldham County","Orange County","Palo Pinto County","Panola County","Parker County","Parmer County",
+    "Pecos County","Polk County","Potter County","Presidio County","Rains County","Randall County",
+    "Reagan County","Real County","Red River County","Reeves County","Refugio County","Roberts County",
+    "Robertson County","Rockwall County","Runnels County","Rusk County","Sabine County","San Augustine County",
+    "San Jacinto County","San Patricio County","San Saba County","Schleicher County","Scurry County",
+    "Shackelford County","Shelby County","Sherman County","Smith County","Somervell County","Starr County",
+    "Stephens County","Sterling County","Stonewall County","Sutton County","Swisher County","Tarrant County",
+    "Taylor County","Terrell County","Terry County","Throckmorton County","Titus County","Tom Green County",
+    "Travis County","Trinity County","Tyler County","Upshur County","Upton County","Uvalde County",
+    "Val Verde County","Van Zandt County","Victoria County","Walker County","Waller County","Ward County",
+    "Washington County","Webb County","Wharton County","Wheeler County","Wichita County","Wilbarger County",
+    "Willacy County","Williamson County","Wilson County","Winkler County","Wise County","Wood County",
+    "Yoakum County","Young County","Zapata County","Zavala County"
+];
+
+const input = document.getElementById("county-search");
+const dropdown = document.getElementById("county-dropdown");
+
+// Show matching counties
+input.addEventListener("input", () => {
+    const value = input.value.toLowerCase();
+    dropdown.innerHTML = ""; 
+
+    if (value === "") {
+        dropdown.style.display = "none";
+        return;
+    }
+
+    const matches = counties.filter(c => c.toLowerCase().includes(value));
+
+    matches.forEach(county => {
+        const div = document.createElement("div");
+        div.classList.add("dropdown-item");
+        div.textContent = county;
+
+        div.onclick = () => {
+            input.value = county;
+            dropdown.style.display = "none";
+        };
+
+        dropdown.appendChild(div);
+    });
+
+    dropdown.style.display = matches.length ? "block" : "none";
+});
+
+// Lookup button
+document.getElementById("lookup-btn").addEventListener("click", function () {
+    const county = input.value.trim();
+
+    if (!counties.includes(county)) {
+        document.getElementById("lookup-error").textContent = "Select a valid county.";
+        return;
+    }
+
+    window.location.href = "county.html?county=" + encodeURIComponent(county);
+});
+</script>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<script>
+// Load New CSV → Compute Avg → Draw Chart with Center Text
+fetch("county_happiness_with_reddit_feedback_normalized.csv")
+    .then(response => response.text())
+    .then(csv => {
+        const rows = csv.trim().split("\n").slice(1); // skip header
+
+        // Take the 4th column (HappinessScore)
+        const scores = rows.map(row => {
+            const parts = row.split(",", 5); // Only split first 5 columns, ignore the rest
+            return parseFloat(parts[4].trim()); // index 4 = HappinessScore
+
+        });
+
+        const avg = scores.reduce((a,b) => a+b, 0) / scores.length;
+        const valueLabel = Math.round(avg).toString();
+
+        const ctx = document.getElementById("avgHappinessChart").getContext("2d");
+
+        const centerTextPlugin = {
+            id: 'centerText',
+            afterDraw(chart) {
+                const {ctx, chartArea: {width, height}} = chart;
+                ctx.save();
+                ctx.font = "bold 26px sans-serif";
+                ctx.fillStyle = "#333";
+                ctx.textAlign = "center";
+                ctx.textBaseline = "middle";
+                ctx.fillText(valueLabel, width / 2, height / 2);
+            }
+        };
+
+        new Chart(ctx, {
+            type: "doughnut",
+            data: {
+                datasets: [{
+                    data: [avg, 100 - avg],
+                    backgroundColor: ["#E20074", "#ececf0"], // T-Mobile colors 🔥
+                    borderWidth: 0
+                }]
+            },
+            options: {
+                cutout: "72%",
+                plugins: {
+                    legend: { display: false },
+                    tooltip: { enabled: false }
+                }
+            },
+            plugins: [centerTextPlugin]
+        });
+    });
+</script>
+
+<script>
+fetch("county_happiness_with_reddit_feedback_normalized.csv")
+    .then(response => response.text())
+    .then(csv => {
+        const rows = csv.trim().split("\n").slice(1);
+        const counties = rows.map(row => {
+            const parts = row.split(",", 5);
+            return { name: parts[0].trim(), score: parseFloat(parts[4].trim()) };
+        });
+
+        // Sort counties by score
+        const sorted = counties.sort((a,b) => b.score - a.score);
+
+        const topFive = sorted.slice(0, 5);
+        const bottomFive = sorted.slice(-5).reverse();
+
+        // Populate UI
+        const topList = document.getElementById("top-five");
+        const bottomList = document.getElementById("bottom-five");
+
+        topFive.forEach(c => {
+            const li = document.createElement("li");
+            li.textContent = `${c.name} (${c.score.toFixed(2)})`;
+            topList.appendChild(li);
+        });
+
+        bottomFive.forEach(c => {
+            const li = document.createElement("li");
+            li.textContent = `${c.name} (${c.score.toFixed(2)})`;
+            bottomList.appendChild(li);
+        });
+
+    });
+</script>
+
+
+
+
+
+
+</body>
+</html>
