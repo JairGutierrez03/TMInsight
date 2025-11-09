@@ -5,7 +5,7 @@
     <title>County Details</title>
     <link rel="stylesheet" href="style.css">
 
-    <!-- ✅ Google Charts -->
+    
     <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
 </head>
 <body>
@@ -33,7 +33,7 @@
 </nav>
 
 
-    <!-- MAIN CONTENT -->
+    //Main
     <main class="main-content">
         <header class="main-header">
             <div class="greeting" id="county-title"></div>
@@ -42,7 +42,7 @@
 
         <div class="county-container">
 
-            <!-- SCORE GRID -->
+            
             <div class="county-score-card">
                 <div class="score-item">
                     <label>Sentiment Score</label>
@@ -65,17 +65,17 @@
                 </div>
             </div>
 
-            <!-- ✅ SANKEY CHART -->
+            //Sankey
             <div class="component-sankey-box">
                 <h3>Score Contribution Flow</h3>
                 <div id="sankeyChart"></div>
             </div>
 
 
-            <!-- CLUSTER LABEL -->
+            
             <div class="cluster-box" id="cluster-box">Loading...</div>
 
-            <!-- RECOMMENDATION -->
+            //Rec Box
             <div class="recommendation-box">
                 <h2>Recommendation</h2>
                 <p id="recommendation-text">Loading suggestion...</p>
@@ -87,12 +87,12 @@
 
 
 <script>
-// Parse county from URL
+
 const urlParams = new URLSearchParams(window.location.search);
 const countyName = urlParams.get("county");
 document.getElementById("county-title").textContent = countyName;
 
-// Fetch CSV + extract correct row
+
 fetch("county_happiness_with_reddit_feedback_normalized.csv")
 .then(response => response.text())
 .then(csv => {
@@ -116,13 +116,13 @@ fetch("county_happiness_with_reddit_feedback_normalized.csv")
     const label = parts[6];
     const recommendation = parts[7];
 
-    // Fill UI values
+    
     document.getElementById("sentiment-score").textContent = sentiment.toFixed(2);
     document.getElementById("network-score").textContent = network.toFixed(2);
     document.getElementById("reddit-score").textContent = reddit.toFixed(2);
     document.getElementById("happiness-score").textContent = happiness.toFixed(2);
 
-    // Label classification colors
+    // Classification colors
     const clusterDiv = document.getElementById("cluster-box");
     clusterDiv.textContent = label;
     const labelClassMap = {
@@ -134,10 +134,10 @@ fetch("county_happiness_with_reddit_feedback_normalized.csv")
     clusterDiv.className = "cluster-box";
     clusterDiv.classList.add(labelClassMap[label] || "moderate");
 
-    // Recommendation
+    
     document.getElementById("recommendation-text").textContent = recommendation;
 
-  // ✅ Draw Sankey
+  // Sankey
 google.charts.load("current", { packages:["sankey"] });
 google.charts.setOnLoadCallback(() => {
 
@@ -146,7 +146,7 @@ google.charts.setOnLoadCallback(() => {
     data.addColumn("string", "To");
     data.addColumn("number", "Value");
 
-    // Prevent collapse if any component is zero
+    // Sankey min values
     const safeSentiment = sentiment > 0 ? sentiment : 0.01;
     const safeNetwork = network > 0 ? network : 0.01;
     const safeReddit = reddit > 0 ? reddit : 0.01;
@@ -167,10 +167,10 @@ const options = {
       width: 14,
       nodePadding: 22,
       colors: [
-        "#f7c1ea",  // Network
-        "#ffd2fa",  // Reddit
-        "#f063c1",  // Sentiment
-        "#E20074"   // Total Happiness (stays bold magenta)
+        "#f7c1ea",  
+        "#ffd2fa", 
+        "#f063c1",  
+        "#E20074"   
       ]
     },
     link: { colorMode: "source" }
