@@ -77,8 +77,6 @@ legend_css = '''
 '''
 m.get_root().html.add_child(folium.Element(legend_css))
 
-# ----------------------------------------------------------
-# 8. Save Map
-# ----------------------------------------------------------
+
 m.save("texas_county_happiness_map.html")
 print("Map updated correctly.")
