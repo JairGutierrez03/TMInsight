@@ -18,7 +18,7 @@ body, html {
     gap: 20px;
 }
 
-/* SIDEBAR */
+//Nav BAr
 .sidebar {
     flex-basis: 240px;
     background: #ffffff;
@@ -65,7 +65,7 @@ body, html {
     font-weight: bold;
 }
 
-/* MAIN CONTENT */
+
 .main-content {
     flex-grow: 1;
     display: flex;
@@ -92,23 +92,23 @@ body, html {
     border-radius: 50%;
 }
 
-/* CONTENT BODY */
+
 .content-body {
     display: flex;
     flex-grow: 1;
     gap: 20px;
 }
 
-/* LEFT COLUMN */
+
 .content-column-left {
     flex: 2;
-    min-width: 0; /* allows iframe to scale properly */
+    min-width: 0; 
     display: flex;
     flex-direction: column;
     gap: 20px;
 }
 
-/* MAP CONTAINER */
+//Map
 .map-container {
     height: 450px;
     background: #ffffff;
@@ -126,16 +126,15 @@ body, html {
 }
 
 .map-container iframe {
-    flex-grow: 1;      /* expand to fill container minus title + subtitle */
+    flex-grow: 1;     
     width: 100%;
-    height: 100%;      /* <-- this restores the original map size */
+    height: 100%;     
     border: none;
     border-radius: 10px;
 }
 
 
 
-/* VOLUME METRICS */
 .volume-container {
     min-height: 230px;
     background: white;
@@ -171,16 +170,16 @@ body, html {
     margin-top: 6px;
 }
 
-/* RIGHT COLUMN */
+
 .content-column-right {
     flex: 1;
-    max-width: 360px; /* keeps lookup sidebar from stretching */
+    max-width: 360px; 
     display: flex;
     flex-direction: column;
     gap: 20px;
 }
 
-/* LOOKUP CARD */
+
 .lookup-card {
     background: white;
     border-radius: 14px;
@@ -197,7 +196,7 @@ body, html {
     font-weight: bold;
 }
 
-/* SEARCH INPUT + WRAPPER */
+
 .lookup-input-wrapper {
     width: 100%;
     position: relative;
@@ -213,7 +212,7 @@ body, html {
     box-sizing: border-box;
 }
 
-/* DROPDOWN LIST */
+
 .dropdown-list {
     position: absolute;
     top: calc(100% + 4px);
@@ -238,7 +237,7 @@ body, html {
     background-color: #ececf0;
 }
 
-/* BUTTON */
+
 #lookup-btn {
     padding: 12px;
     background-color: #E20074;
@@ -258,7 +257,7 @@ body, html {
     height: 16px;
 }
 
-/* Map Subtitle */
+
 .map-subtitle {
     font-size: 0.95rem;
     font-weight: 400;
@@ -267,7 +266,7 @@ body, html {
     margin-bottom: 10px;
 }
 
-/* Lookup Helper Text */
+
 .lookup-subtitle {
     font-size: 0.9rem;
     color: #777;
@@ -282,11 +281,11 @@ body, html {
 }
 
 .nav-item.active i {
-    color: white; /* icon turns white when selected */
+    color: white; 
 }
 
 .nav-item:hover i {
-    color: #E20074; /* icon gets pink on hover */
+    color: #E20074;
 }
 
 .nav-item i {
@@ -416,7 +415,7 @@ body, html {
 .cluster-box.positive { background:#5bc0de; }
 .cluster-box.excellent { background:#5cb85c; }
  
-/* Expand container so chart has room */
+
 .county-container {
     max-width: 1000px;
     width: 100%;
@@ -433,7 +432,7 @@ body, html {
     box-shadow: 0 4px 10px rgba(0,0,0,0.06);
     margin-top: 20px;
 }
-/* SANKEY WRAPPER */
+
 .component-sankey-box {
     background: white;
     padding: 24px;
@@ -441,21 +440,21 @@ body, html {
     box-shadow: 0 4px 10px rgba(0,0,0,0.06);
     margin-top: 25px;
     width: 100%;
-    max-width: 900px;   /* ✅ reduced width so boxes don't reach screen edges */
+    max-width: 900px;   
     margin-left: auto;
     margin-right: auto;
 }
 
 #sankeyChart {
     width: 100%;
-    height: 450px;  /* ✅ consistent height */
-    overflow: visible;  /* allow chart labels to extend safely */
+    height: 450px;  
+    overflow: visible; 
 }
 
 
 .network-container {
     width: 100%;
-    max-width: 900px;  /* prevents overflow on ultra-wide screens */
+    max-width: 900px; 
     margin-left: auto;
     margin-right: auto;
 }
