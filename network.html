@@ -11,7 +11,7 @@
 
 <div class="dashboard-container">
 
-    <!-- SIDEBAR -->
+    // Nav Bar
     <nav class="sidebar">
         <div class="sidebar-logo">
             <span class="logo-t">TM</span>Insights
@@ -33,7 +33,7 @@
 
     </nav>
 
-    <!-- MAIN CONTENT -->
+    //Main
     <main class="main-content">
         <header class="main-header">
             <div class="greeting">T-Mobile Network Live Status</div>
@@ -55,7 +55,7 @@
 
 
 <script>
-// Setup Chart
+//Chart
 const ctx = document.getElementById("outageChart").getContext("2d");
 
 let outageChart = new Chart(ctx, {
@@ -87,7 +87,7 @@ let outageChart = new Chart(ctx, {
     }
 });
 
-// Fake Data Simulation
+// Simulation
 function generateFakeOutageValue() {
     return Math.floor(Math.random() * 40) + 5;
 }
@@ -107,14 +107,13 @@ function updateChart() {
     outageChart.update();
 }
 
-// Fill initial fake history
+
 for (let i = 0; i < 6; i++) {
     outageChart.data.labels.push(`-${6-i}m`);
     outageChart.data.datasets[0].data.push(generateFakeOutageValue());
 }
 outageChart.update();
 
-// Update every 10 seconds
 setInterval(updateChart, 10000);
 </script>
 
