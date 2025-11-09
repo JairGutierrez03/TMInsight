@@ -18,7 +18,7 @@ body, html {
     gap: 20px;
 }
 
-//Nav BAr
+
 .sidebar {
     flex-basis: 240px;
     background: #ffffff;
@@ -108,7 +108,7 @@ body, html {
     gap: 20px;
 }
 
-//Map
+
 .map-container {
     height: 450px;
     background: #ffffff;
